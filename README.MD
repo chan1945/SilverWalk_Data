@@ -2,6 +2,140 @@
 
 진주시 고령보행자 교통사고 위험도 분석을 위한 데이터 수집 및 결합 작업 공간입니다. 도로명주소 도로구간 데이터에서 진주시 도로 포인트를 만들고, 각 포인트별 위험도와 앞으로 필요할 feature 들을 결합합니다.
 
+## 실행 방법
+
+### 1. 저장소 클론
+
+```bash
+git clone <REPOSITORY_URL>
+cd <REPOSITORY_NAME>
+```
+
+```bash
+cd <PROJECT_DIR>
+```
+
+### 2. 데이터 파일 준비
+
+Data 폴더에 데이터들을 넣어주십쇼
+
+```text
+Data/
+├── (도로명주소)도로구간_경남/
+│   ├── TL_SPRD_MANAGE_48_202605.shp
+│   ├── TL_SPRD_MANAGE_48_202605.shx
+│   ├── TL_SPRD_MANAGE_48_202605.dbf
+│   ├── TL_SPRD_MANAGE_48_202605.prj
+│   └── TL_SPRD_MANAGE_48_202605.cpg
+└── ITS_node_link/
+    ├── MOCT_LINK.shp
+    ├── MOCT_LINK.shx
+    ├── MOCT_LINK.dbf
+    ├── MOCT_LINK.prj
+    ├── MOCT_LINK.cpg
+    ├── MOCT_NODE.shp
+    ├── MOCT_NODE.shx
+    ├── MOCT_NODE.dbf
+    ├── MOCT_NODE.prj
+    └── MOCT_NODE.cpg
+```
+
+필수 입력 파일:
+
+| 경로 | 설명 |
+|---|---|
+| `Data/(도로명주소)도로구간_경남/TL_SPRD_MANAGE_48_202605.shp` | 경남 도로명주소 도로구간 |
+| `Data/ITS_node_link/MOCT_LINK.shp` | ITS 표준노드링크 링크 데이터 |
+
+Shapefile은 `.shp`만으로는 실행되지 않습니다. 같은 이름의 `.shx`, `.dbf`, `.prj`, `.cpg` 파일도 반드시 같은 폴더에 있어야 합니다.
+
+### 3. Python 가상환경 생성
+
+Windows PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+macOS/Linux:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+### 4. 패키지 설치
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Jupyter Notebook 실행
+
+```bash
+jupyter notebook
+```
+
+브라우저가 열리면 아래 순서대로 노트북을 실행합니다.
+
+### 6. 사고 데이터 수집 노트북 실행
+
+먼저 실행할 노트북:
+
+```text
+노인보행사고데이터.ipynb
+```
+
+실행 방법:
+
+1. 노트북을 엽니다.
+2. 메뉴에서 `Kernel > Restart & Run All`을 실행합니다.
+3. 실행이 끝나면 아래 파일이 생성되었는지 확인합니다.
+
+```text
+Data/jinju_old_pedestrian_individual_accidents_2020_2025.csv
+```
+
+이 노트북은 TAAS 웹 내부 요청을 사용하므로 인터넷 연결이 필요합니다. TAAS 페이지 구조가 바뀌면 수집 코드가 실패할 수 있습니다.
+
+### 7. 도로 포인트 및 feature 결합 노트북 실행
+
+다음으로 실행할 노트북:
+
+```text
+데이터결합.ipynb
+```
+
+실행 방법:
+
+1. 노트북을 엽니다.
+2. 메뉴에서 `Kernel > Restart & Run All`을 실행합니다.
+3. 실행이 끝나면 아래 최종 파일이 생성되었는지 확인합니다.
+
+```text
+Data/jinju_road_points.csv
+```
+
+이 노트북은 다음 feature를 결합합니다.
+
+| feature | 생성 방식 |
+|---|---|
+| `POINT_ID` | 진주시 도로 라인 위 25m 간격 포인트 |
+| `위도`, `경도` | `POINT_ID` 위치를 EPSG:4326으로 변환 |
+| `위험도` | 50m 버퍼 내 고령보행자 사고 기반 계산 |
+| `제한속도` | ITS 표준노드링크 최근접 링크의 `MAX_SPD` |
+
+### 9. 실행 순서 요약
+
+```text
+1. 원천 데이터 파일을 Data/ 하위에 배치
+2. pip install -r requirements.txt
+3. 노인보행사고데이터.ipynb 실행
+4. 데이터결합.ipynb 실행
+5. Data/jinju_road_points.csv 확인
+```
+
 ## 주요 산출물
 
 최종 산출 파일:
@@ -178,137 +312,3 @@ Data/jinju_road_points.csv
 ```
 
 
-## 실행 방법
-
-### 1. 저장소 클론
-
-```bash
-git clone <REPOSITORY_URL>
-cd <REPOSITORY_NAME>
-```
-
-```bash
-cd <PROJECT_DIR>
-```
-
-### 2. 데이터 파일 준비
-
-Data 폴더에 데이터들을 넣어주십쇼
-
-```text
-Data/
-├── (도로명주소)도로구간_경남/
-│   ├── TL_SPRD_MANAGE_48_202605.shp
-│   ├── TL_SPRD_MANAGE_48_202605.shx
-│   ├── TL_SPRD_MANAGE_48_202605.dbf
-│   ├── TL_SPRD_MANAGE_48_202605.prj
-│   └── TL_SPRD_MANAGE_48_202605.cpg
-└── ITS_node_link/
-    ├── MOCT_LINK.shp
-    ├── MOCT_LINK.shx
-    ├── MOCT_LINK.dbf
-    ├── MOCT_LINK.prj
-    ├── MOCT_LINK.cpg
-    ├── MOCT_NODE.shp
-    ├── MOCT_NODE.shx
-    ├── MOCT_NODE.dbf
-    ├── MOCT_NODE.prj
-    └── MOCT_NODE.cpg
-```
-
-필수 입력 파일:
-
-| 경로 | 설명 |
-|---|---|
-| `Data/(도로명주소)도로구간_경남/TL_SPRD_MANAGE_48_202605.shp` | 경남 도로명주소 도로구간 |
-| `Data/ITS_node_link/MOCT_LINK.shp` | ITS 표준노드링크 링크 데이터 |
-
-Shapefile은 `.shp`만으로는 실행되지 않습니다. 같은 이름의 `.shx`, `.dbf`, `.prj`, `.cpg` 파일도 반드시 같은 폴더에 있어야 합니다.
-
-### 3. Python 가상환경 생성
-
-Windows PowerShell:
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-```
-
-macOS/Linux:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-```
-
-### 4. 패키지 설치
-
-```bash
-pip install -r requirements.txt
-```
-
-### 5. Jupyter Notebook 실행
-
-```bash
-jupyter notebook
-```
-
-브라우저가 열리면 아래 순서대로 노트북을 실행합니다.
-
-### 6. 사고 데이터 수집 노트북 실행
-
-먼저 실행할 노트북:
-
-```text
-노인보행사고데이터.ipynb
-```
-
-실행 방법:
-
-1. 노트북을 엽니다.
-2. 메뉴에서 `Kernel > Restart & Run All`을 실행합니다.
-3. 실행이 끝나면 아래 파일이 생성되었는지 확인합니다.
-
-```text
-Data/jinju_old_pedestrian_individual_accidents_2020_2025.csv
-```
-
-이 노트북은 TAAS 웹 내부 요청을 사용하므로 인터넷 연결이 필요합니다. TAAS 페이지 구조가 바뀌면 수집 코드가 실패할 수 있습니다.
-
-### 7. 도로 포인트 및 feature 결합 노트북 실행
-
-다음으로 실행할 노트북:
-
-```text
-데이터결합.ipynb
-```
-
-실행 방법:
-
-1. 노트북을 엽니다.
-2. 메뉴에서 `Kernel > Restart & Run All`을 실행합니다.
-3. 실행이 끝나면 아래 최종 파일이 생성되었는지 확인합니다.
-
-```text
-Data/jinju_road_points.csv
-```
-
-이 노트북은 다음 feature를 결합합니다.
-
-| feature | 생성 방식 |
-|---|---|
-| `POINT_ID` | 진주시 도로 라인 위 25m 간격 포인트 |
-| `위도`, `경도` | `POINT_ID` 위치를 EPSG:4326으로 변환 |
-| `위험도` | 50m 버퍼 내 고령보행자 사고 기반 계산 |
-| `제한속도` | ITS 표준노드링크 최근접 링크의 `MAX_SPD` |
-
-
-### 9. 실행 순서 요약
-
-```text
-1. 원천 데이터 파일을 Data/ 하위에 배치
-2. pip install -r requirements.txt
-3. 노인보행사고데이터.ipynb 실행
-4. 데이터결합.ipynb 실행
-5. Data/jinju_road_points.csv 확인
-```
