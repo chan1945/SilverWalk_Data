@@ -1,0 +1,28 @@
+# Core data handling
+pandas
+numpy
+openpyxl
+
+# Geospatial processing
+geopandas
+shapely
+pyproj
+rtree
+pyogrio
+
+# Visualization
+matplotlib
+plotly
+contextily
+
+# Modeling and explanation
+scikit-learn
+scipy
+xgboost
+shap
+joblib
+
+# Notebook and API utilities
+notebook
+ipykernel
+requests

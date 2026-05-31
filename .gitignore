@@ -1,0 +1,23 @@
+# Python / Jupyter
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Large or local data
+example/
+Data/*
+!Data/.gitkeep
+
+# Generated outputs
+*.html
+*.geojson
+*.gpkg
