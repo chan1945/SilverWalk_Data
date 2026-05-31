@@ -71,14 +71,6 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 5. Jupyter Notebook 실행
-
-```bash
-jupyter notebook
-```
-
-브라우저가 열리면 아래 순서대로 노트북을 실행합니다.
-
 ### 6. 사고 데이터 수집 노트북 실행
 
 먼저 실행할 노트북:
@@ -86,18 +78,12 @@ jupyter notebook
 ```text
 노인보행사고데이터.ipynb
 ```
-
-실행 방법:
-
-1. 노트북을 엽니다.
-2. 메뉴에서 `Kernel > Restart & Run All`을 실행합니다.
-3. 실행이 끝나면 아래 파일이 생성되었는지 확인합니다.
-
+실행하면 Data 폴더에 csv 파일이 생성됩니다.
 ```text
 Data/jinju_old_pedestrian_individual_accidents_2020_2025.csv
 ```
 
-이 노트북은 TAAS 웹 내부 요청을 사용하므로 인터넷 연결이 필요합니다. TAAS 페이지 구조가 바뀌면 수집 코드가 실패할 수 있습니다.
+이 노트북은 TAAS 웹 내부 요청을 사용하므로 인터넷 연결이 필요합니다.
 
 ### 7. 도로 포인트 및 feature 결합 노트북 실행
 
@@ -106,13 +92,7 @@ Data/jinju_old_pedestrian_individual_accidents_2020_2025.csv
 ```text
 데이터결합.ipynb
 ```
-
-실행 방법:
-
-1. 노트북을 엽니다.
-2. 메뉴에서 `Kernel > Restart & Run All`을 실행합니다.
-3. 실행이 끝나면 아래 최종 파일이 생성되었는지 확인합니다.
-
+실행하면 Data 폴더에 csv 파일이 생성됩니다.
 ```text
 Data/jinju_road_points.csv
 ```
