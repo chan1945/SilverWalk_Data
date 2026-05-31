@@ -30,7 +30,7 @@ Data/
 │   ├── TL_SPRD_MANAGE_48_202605.dbf
 │   ├── TL_SPRD_MANAGE_48_202605.prj
 │   └── TL_SPRD_MANAGE_48_202605.cpg
-└── ITS_node_link/
+├── ITS_node_link/
     ├── MOCT_LINK.shp
     ├── MOCT_LINK.shx
     ├── MOCT_LINK.dbf
@@ -41,6 +41,7 @@ Data/
     ├── MOCT_NODE.dbf
     ├── MOCT_NODE.prj
     └── MOCT_NODE.cpg
+└── 소상공인시장진흥공단_상가(상권)정보_경남_202603.csv
 ```
 
 필수 입력 파일:
@@ -49,6 +50,7 @@ Data/
 |---|---|
 | `Data/(도로명주소)도로구간_경남/TL_SPRD_MANAGE_48_202605.shp` | 경남 도로명주소 도로구간 |
 | `Data/ITS_node_link/MOCT_LINK.shp` | ITS 표준노드링크 링크 데이터 |
+| `Data/소상공인시장진흥공단_상가(상권)정보_경남_202603.csv` | 경남 상가 업종 및 위치 데이터 |
 
 Shapefile은 `.shp`만으로는 실행되지 않습니다. 같은 이름의 `.shx`, `.dbf`, `.prj`, `.cpg` 파일도 반드시 같은 폴더에 있어야 합니다.
 
@@ -74,7 +76,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 6. 사고 데이터 수집 노트북 실행
+### 5. 사고 데이터 수집 노트북 실행
 
 먼저 실행할 노트북:
 
@@ -88,7 +90,7 @@ Data/jinju_old_pedestrian_individual_accidents_2020_2025.csv
 
 이 노트북은 TAAS 웹 내부 요청을 사용하므로 인터넷 연결이 필요합니다.
 
-### 7. 도로 포인트 및 feature 결합 노트북 실행
+### 6. 도로 포인트 및 feature 결합 노트북 실행
 
 다음으로 실행할 노트북:
 
@@ -108,8 +110,9 @@ Data/jinju_road_points.csv
 | `위도`, `경도` | `POINT_ID` 위치를 EPSG:4326으로 변환 |
 | `위험도` | 50m 버퍼 내 고령보행자 사고 기반 계산 |
 | `제한속도` | ITS 표준노드링크 최근접 링크의 `MAX_SPD` |
+| 상가 업종별 개수 | 300m 반경 내 진주시 상가 업종별 개수 |
 
-### 9. 실행 순서 요약
+### 7. 실행 순서 요약
 
 ```text
 1. 원천 데이터 파일을 Data/ 하위에 배치
@@ -130,7 +133,7 @@ Data/jinju_road_points.csv
 현재 최종 CSV 컬럼:
 
 ```text
-POINT_ID, 위도, 경도, 제한속도, 위험도
+POINT_ID, 위도, 경도, 제한속도, 위험도, 상가 업종별 개수 컬럼 85개
 ```
 
 컬럼 설명:
@@ -142,6 +145,7 @@ POINT_ID, 위도, 경도, 제한속도, 위험도
 | `경도` | POINT_ID 위치의 경도, EPSG:4326 |
 | `제한속도` | ITS 표준노드링크에서 가장 가까운 링크의 `MAX_SPD` 값 |
 | `위험도` | 50m 버퍼 내 고령보행자 사고 기반 위험도 |
+| 상가 업종 컬럼 | 300m 반경 내 해당 업종 상가 수 |
 
 위험도 계산식:
 
@@ -153,10 +157,18 @@ POINT_ID, 위도, 경도, 제한속도, 위험도
 
 ```text
 .
-├── README.MD
+├── README.md
 ├── requirements.txt
 ├── 노인보행사고데이터.ipynb
 ├── 데이터결합.ipynb
+├── src/
+│   └── silverwalk/
+│       ├── config.py
+│       ├── roads.py
+│       ├── features.py
+│       ├── accidents.py
+│       ├── speed.py
+│       └── business.py
 ├── Data/
 │   ├── (도로명주소)도로구간_경남/
 │   │   └── TL_SPRD_MANAGE_48_202605.shp 외 부속 파일
@@ -166,6 +178,19 @@ POINT_ID, 위도, 경도, 제한속도, 위험도
 │   └── jinju_road_points.csv
 └── example/
 ```
+
+## 코드 구조
+
+핵심 처리 함수는 `src/silverwalk/`로 분리되어 있고, `데이터결합.ipynb`는 전체 결합 순서를 실행하는 파이프라인 역할을 합니다.
+
+| 파일 | 역할 |
+|---|---|
+| `src/silverwalk/config.py` | 데이터 경로, 거리 기준, 최종 컬럼 목록 |
+| `src/silverwalk/roads.py` | 도로 데이터 로드, 진주시 필터링, 25m 포인트, 50m 버퍼 생성 |
+| `src/silverwalk/features.py` | 기본 좌표 feature 생성 |
+| `src/silverwalk/accidents.py` | 사고 데이터 결합 및 위험도 계산 |
+| `src/silverwalk/speed.py` | ITS 표준노드링크 제한속도 결합 |
+| `src/silverwalk/business.py` | 300m 반경 상가 업종별 개수 결합 |
 
 ## 입력 데이터
 
@@ -239,6 +264,28 @@ Data/ITS_node_link/MOCT_LINK.shp
 - 각 `POINT_ID`에서 가장 가까운 링크 1개를 선택해 `MAX_SPD`를 `제한속도`로 부여합니다.
 - 동거리 링크가 여러 개 잡히는 경우 `POINT_ID`, 거리, `LINK_ID` 기준으로 하나만 남깁니다.
 
+### 4. 소상공인시장진흥공단 상가 정보 데이터
+
+```text
+Data/소상공인시장진흥공단_상가(상권)정보_경남_202603.csv
+```
+
+사용 컬럼:
+
+| 컬럼 | 설명 |
+|---|---|
+| `시군구명` | 진주시 필터링 |
+| `상권업종대분류명` | 상가 업종 대분류 |
+| `상권업종중분류명` | 상가 업종 중분류 |
+| `경도`, `위도` | 상가 위치, EPSG:4326 |
+
+처리 방식:
+
+- `시군구명 == "진주시"`만 사용합니다.
+- 상가 좌표를 EPSG:4326에서 도로 포인트 좌표계로 변환합니다.
+- 각 `POINT_ID` 기준 300m 반경 안에 있는 상가를 업종별로 집계합니다.
+- 대분류 컬럼과 `대분류_중분류` 컬럼을 최종 CSV에 추가합니다.
+
 ## 노트북 실행 순서
 
 ### 1. 사고 데이터 수집
@@ -280,7 +327,8 @@ Data/jinju_old_pedestrian_individual_accidents_2020_2025.csv
 5. 사고 포인트가 버퍼 안에 들어오면 사고 피해 규모 집계
 6. 위험도 계산
 7. ITS 표준노드링크에서 최근접 링크 제한속도 결합
-8. 최종 CSV 저장
+8. 300m 반경 내 상가 업종별 개수 결합
+9. 최종 CSV 저장
 
 최종 저장 파일:
 
@@ -293,5 +341,3 @@ Data/jinju_road_points.csv
 ```text
 109,795
 ```
-
-
