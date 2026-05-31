@@ -1,2 +1,0 @@
-"""SilverWalk data processing utilities."""
-
