@@ -1,17 +1,18 @@
 import geopandas as gpd
 import pandas as pd
 
-from silverwalk.config import BUSINESS_CATEGORY_COLUMNS
+from silverwalk.config import BUSINESS_CATEGORY_COLUMNS, TARGET_BUSINESS_SIDO_NAME, TARGET_REGION_NAME
 
 ###################################################
 # 상가 수 컬럼 추가 함수
-# 각 POINT_ID의 반경 300m 안에 있는 진주시 상가 수를 업종별 컬럼으로 추가합니다.
+# 각 POINT_ID의 반경 300m 안에 있는 대상 지역 상가 수를 업종별 컬럼으로 추가합니다.
 ###################################################
 
 def add_business_category_counts(final_df, points_gdf, business_csv, radius_m=300):
-    """각 POINT_ID의 반경 radius_m 안에 있는 진주시 상가 수를 업종별 컬럼으로 추가합니다."""
+    """각 POINT_ID의 반경 radius_m 안에 있는 대상 지역 상가 수를 업종별 컬럼으로 추가합니다."""
     required_cols = [
         "상가업소번호",
+        "시도명",
         "시군구명",
         "상권업종대분류명",
         "상권업종중분류명",
@@ -24,7 +25,7 @@ def add_business_category_counts(final_df, points_gdf, business_csv, radius_m=30
     if missing_cols:
         raise ValueError(f"상가 데이터에 필요한 컬럼이 없습니다: {missing_cols}")
 
-    business_df = business_df.loc[business_df["시군구명"].eq("진주시")].copy()
+    business_df = business_df.loc[business_df["시도명"].eq(TARGET_BUSINESS_SIDO_NAME)].copy()
     business_df["경도"] = pd.to_numeric(business_df["경도"], errors="coerce")
     business_df["위도"] = pd.to_numeric(business_df["위도"], errors="coerce")
     business_df = business_df.dropna(subset=["경도", "위도"]).copy()
@@ -61,8 +62,7 @@ def add_business_category_counts(final_df, points_gdf, business_csv, radius_m=30
     result_df = final_df.merge(business_counts, on="POINT_ID", how="left")
     result_df[BUSINESS_CATEGORY_COLUMNS] = result_df[BUSINESS_CATEGORY_COLUMNS].fillna(0).astype(int)
 
-    print(f"진주시 상가 데이터 수: {len(business_points_gdf):,}")
+    print(f"{TARGET_REGION_NAME} 상가 데이터 수: {len(business_points_gdf):,}")
     print(f"반경 {radius_m}m 상가-포인트 매칭 수: {len(joined_business):,}")
 
     return result_df
-

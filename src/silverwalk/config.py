@@ -8,15 +8,18 @@ from pathlib import Path
 DATA_DIR = Path("Data")
 
 ROAD_SHP_CANDIDATES = [
-    Path("(도로명주소)도로구간_경남") / "TL_SPRD_MANAGE_48_202605.shp",
-    DATA_DIR / "(도로명주소)도로구간_경남" / "TL_SPRD_MANAGE_48_202605.shp",
+    Path("(도로명주소)도로구간_서울") / "TL_SPRD_MANAGE_11_202605.shp",
+    DATA_DIR / "(도로명주소)도로구간_서울" / "TL_SPRD_MANAGE_11_202605.shp",
 ]
-ACCIDENT_CSV = DATA_DIR / "jinju_old_pedestrian_individual_accidents_2020_2025.csv"
+ACCIDENT_CSV = DATA_DIR / "seoul_old_pedestrian_individual_accidents_2020_2025.csv"
 NODELINK_SHP = DATA_DIR / "ITS_node_link" / "MOCT_LINK.shp"
-BUSINESS_CSV = DATA_DIR / "소상공인시장진흥공단_상가(상권)정보_경남_202603.csv"
-OUTPUT_JOIN_CSV = DATA_DIR / "jinju_road_points.csv"
+BUSINESS_CSV = DATA_DIR / "소상공인시장진흥공단_상가(상권)정보_서울_202603.csv"
+OUTPUT_JOIN_CSV = DATA_DIR / "seoul_road_points.csv"
 
-JINJU_SIG_CD = "48170"
+TARGET_REGION_NAME = "서울시"
+TARGET_SIG_CD_PREFIX = "11"
+TARGET_LEGALDONG_PREFIX = "11%"
+TARGET_BUSINESS_SIDO_NAME = "서울특별시"
 INCLUDED_ROAD_CLASSES = {"3", "4"}  # 3: 로, 4: 길
 
 POINT_INTERVAL_M = 25
@@ -110,4 +113,3 @@ BUSINESS_CATEGORY_COLUMNS = [
     "음식_중식",
     "음식_한식",
 ]
-
