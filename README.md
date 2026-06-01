@@ -42,7 +42,7 @@ Data/
 │   ├── MOCT_NODE.prj
 │   └── MOCT_NODE.cpg
 ├── 소상공인시장진흥공단_상가(상권)정보_서울_202603.csv
-├── 서울시 노인의료복지시설현황.xlsx
+├── 서울시_노인의료복지시설현황_geocoded.csv
 └── 국토통계_고령인구수/
 ```
 
@@ -53,7 +53,7 @@ Data/
 | `Data/(도로명주소)도로구간_서울/TL_SPRD_MANAGE_11_202605.shp` | 서울 도로명주소 도로구간 |
 | `Data/ITS_node_link/MOCT_LINK.shp` | ITS 표준노드링크 링크 데이터 |
 | `Data/소상공인시장진흥공단_상가(상권)정보_서울_202603.csv` | 서울 상가 업종 및 위치 데이터 |
-| `Data/서울시 노인의료복지시설현황.xlsx` | 서울시 노인의료복지시설 주소 데이터 |
+| `Data/서울시_노인의료복지시설현황_geocoded.csv` | 서울시 노인의료복지시설 지오코딩 좌표 데이터 |
 | `Data/국토통계_고령인구수/` | 국토정보플랫폼 서울시 구별 250m 격자 고령인구수 데이터 |
 
 Shapefile은 `.shp`만으로는 실행되지 않습니다. 같은 이름의 `.shx`, `.dbf`, `.prj`, `.cpg` 파일도 반드시 같은 폴더에 있어야 합니다.
@@ -80,21 +80,10 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 5. VWorld 지오코딩 인증키 설정
+### 5. 노인의료복지시설 지오코딩 CSV 준비
 
-`데이터결합.ipynb`는 서울시 노인의료복지시설 주소를 좌표로 바꾸기 위해 VWorld Geocoder API를 호출합니다.
-
-macOS/Linux:
-
-```bash
-export VWORLD_API_KEY="발급받은_VWorld_인증키"
-```
-
-Windows PowerShell:
-
-```powershell
-$env:VWORLD_API_KEY="발급받은_VWorld_인증키"
-```
+`데이터결합.ipynb`는 `Data/서울시_노인의료복지시설현황_geocoded.csv`를 읽어 `사회복지시설개수`를 계산합니다.
+이 파일은 `test.ipynb`에서 VWorld Geocoder API로 미리 생성합니다.
 
 ### 6. 사고 데이터 수집 노트북 실행
 
@@ -131,7 +120,7 @@ Data/seoul_road_points.csv
 | `위험도` | 50m 버퍼 내 고령보행자 사고 기반 계산 |
 | `제한속도` | ITS 표준노드링크 최근접 링크의 `MAX_SPD` |
 | `고령인구수` | 300m 반경 내 65세 이상 거주인구 |
-| `사회복지시설개수` | VWorld 지오코딩으로 얻은 노인의료복지시설 좌표 기준 300m 반경 내 시설 개수 |
+| `사회복지시설개수` | 노인의료복지시설 지오코딩 CSV 기준 300m 반경 내 시설 개수 |
 | 상가 업종별 개수 | 300m 반경 내 서울시 상가 업종별 개수 |
 
 ### 8. 실행 순서 요약
@@ -139,7 +128,7 @@ Data/seoul_road_points.csv
 ```text
 1. 원천 데이터 파일을 Data/ 하위에 배치
 2. pip install -r requirements.txt
-3. VWORLD_API_KEY 환경변수 설정
+3. test.ipynb로 Data/서울시_노인의료복지시설현황_geocoded.csv 준비
 4. 노인보행사고데이터.ipynb 실행
 5. 데이터결합.ipynb 실행
 6. Data/seoul_road_points.csv 확인
@@ -169,7 +158,7 @@ POINT_ID, 위도, 경도, 제한속도, 위험도, 고령인구수, 사회복지
 | `제한속도` | ITS 표준노드링크에서 가장 가까운 링크의 `MAX_SPD` 값 |
 | `위험도` | 50m 버퍼 내 고령보행자 사고 기반 위험도 |
 | `고령인구수` | 국토정보플랫폼 250m 격자 인구 데이터 기준 300m 반경 내 65세 이상 거주인구 |
-| `사회복지시설개수` | VWorld 지오코딩으로 얻은 노인의료복지시설 좌표 기준 300m 반경 내 시설 개수 |
+| `사회복지시설개수` | 노인의료복지시설 지오코딩 CSV 기준 300m 반경 내 시설 개수 |
 | 상가 업종 컬럼 | 300m 반경 내 해당 업종 상가 수 |
 
 위험도 계산식:
@@ -202,7 +191,7 @@ POINT_ID, 위도, 경도, 제한속도, 위험도, 고령인구수, 사회복지
 │   ├── ITS_node_link/
 │   │   └── MOCT_LINK.shp 외 부속 파일
 │   ├── seoul_old_pedestrian_individual_accidents_2020_2025.csv
-│   ├── 서울시 노인의료복지시설현황.xlsx
+│   ├── 서울시_노인의료복지시설현황_geocoded.csv
 │   ├── 국토통계_고령인구수/
 │   └── seoul_road_points.csv
 └── example/
@@ -221,7 +210,7 @@ POINT_ID, 위도, 경도, 제한속도, 위험도, 고령인구수, 사회복지
 | `src/silverwalk/speed.py` | ITS 표준노드링크 제한속도 결합 |
 | `src/silverwalk/business.py` | 300m 반경 상가 업종별 개수 결합 |
 | `src/silverwalk/population.py` | 300m 반경 65세 이상 거주인구 결합 |
-| `src/silverwalk/social_welfare.py` | VWorld 지오코딩, 300m 반경 노인의료복지시설 개수 결합 |
+| `src/silverwalk/social_welfare.py` | 300m 반경 노인의료복지시설 개수 결합 |
 
 ## 입력 데이터
 
@@ -342,16 +331,14 @@ Data/국토통계_고령인구수/
 입력 파일:
 
 ```text
-Data/서울시 노인의료복지시설현황.xlsx
+Data/서울시_노인의료복지시설현황_geocoded.csv
 ```
 
 처리 방식:
 
-- 엑셀의 두 시트에서 시설명과 `기관소재지(새주소)`를 읽습니다.
-- 엑셀에는 좌표가 없으므로, VWorld Geocoder API의 주소 좌표 변환 기능을 호출합니다.
-- VWorld 인증키는 환경변수 `VWORLD_API_KEY`로 설정하거나 함수 인자 `vworld_api_key`로 전달합니다.
-- VWorld 문서의 저장 제한을 고려해 기본 실행은 API 결과 좌표를 별도 CSV로 저장하지 않습니다.
-- 좌표 변환에 실패한 시설이 있으면 확인용 목록을 `Data/서울시_노인의료복지시설_주소목록.csv`에 저장합니다.
+- `test.ipynb`에서 VWorld Geocoder API로 생성한 지오코딩 CSV를 사용합니다.
+- `지오코딩상태 == "OK"`이고 `경도`, `위도`가 있는 시설만 사용합니다.
+- 지오코딩 실패 시설은 `사회복지시설개수` 계산에서 제외합니다.
 - 각 `POINT_ID` 기준 300m 반경 안에 있는 시설 수를 `사회복지시설개수` 컬럼으로 추가합니다.
 
 ## 노트북 실행 순서

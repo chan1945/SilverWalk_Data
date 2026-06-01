@@ -14,11 +14,8 @@ ACCIDENT_CSV = DATA_DIR / "seoul_old_pedestrian_individual_accidents_2020_2025.c
 NODELINK_SHP = DATA_DIR / "ITS_node_link" / "MOCT_LINK.shp"
 BUSINESS_CSV = DATA_DIR / "소상공인시장진흥공단_상가(상권)정보_서울_202603.csv"
 POPULATION_GRID_DIR = DATA_DIR / "국토통계_고령인구수"
-SOCIAL_WELFARE_XLSX = DATA_DIR / "서울시 노인의료복지시설현황.xlsx"
 SOCIAL_WELFARE_GEOCODED_CSV = DATA_DIR / "서울시_노인의료복지시설현황_geocoded.csv"
-SOCIAL_WELFARE_ADDRESS_CSV = DATA_DIR / "서울시_노인의료복지시설_주소목록.csv"
 OUTPUT_JOIN_CSV = DATA_DIR / "seoul_road_points.csv"
-VWORLD_API_KEY_ENV = "VWORLD_API_KEY"
 
 # 분석 대상 지역과 도로 구간을 설정하는 상수들
 TARGET_REGION_NAME = "서울시"
