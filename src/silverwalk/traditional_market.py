@@ -6,6 +6,9 @@ from silverwalk.config import (
     TRADITIONAL_MARKET_SHP,
 )
 
+###################################################
+# social_welfare.py: 노인의료복지시설 지오코딩 CSV에서 좌표가 있는 시설만 읽고, 각 도로 구간 포인트에 반경 300m 내의 시설 개수를 합산하여 추가하는 기능을 제공합니다.
+###################################################
 
 MARKET_ID_COL = "TRDAR_CD"
 MARKET_TYPE_COL = "TRDAR_SE_1"
