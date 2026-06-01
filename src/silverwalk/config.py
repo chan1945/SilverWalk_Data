@@ -18,6 +18,7 @@ SOCIAL_WELFARE_XLSX = DATA_DIR / "서울시 노인의료복지시설현황.xlsx"
 SOCIAL_WELFARE_GEOCODED_CSV = DATA_DIR / "서울시_노인의료복지시설현황_geocoded.csv"
 SOCIAL_WELFARE_ADDRESS_CSV = DATA_DIR / "서울시_노인의료복지시설_주소목록.csv"
 OUTPUT_JOIN_CSV = DATA_DIR / "seoul_road_points.csv"
+VWORLD_API_KEY_ENV = "VWORLD_API_KEY"
 
 # 분석 대상 지역과 도로 구간을 설정하는 상수들
 TARGET_REGION_NAME = "서울시"
