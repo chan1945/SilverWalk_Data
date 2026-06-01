@@ -2,6 +2,7 @@ import geopandas as gpd
 import pandas as pd
 
 from silverwalk.config import (
+    BUFFER_300M,
     SOCIAL_WELFARE_COLUMN,
     SOCIAL_WELFARE_GEOCODED_CSV,
     TARGET_REGION_NAME,
@@ -52,7 +53,7 @@ def add_social_welfare_facility_counts(
     final_df,
     points_gdf,
     geocoded_csv=SOCIAL_WELFARE_GEOCODED_CSV,
-    radius_m=300,
+    radius_m=BUFFER_300M,
     output_col=SOCIAL_WELFARE_COLUMN,
 ):
     """각 POINT_ID의 300m 반경 안에 있는 노인의료복지시설 개수를 추가합니다."""

@@ -3,14 +3,14 @@ import warnings
 import geopandas as gpd
 
 from silverwalk.config import (
+    BUFFER_50M,
     SPEED_BUMP_COLUMN,
-    SPEED_BUMP_RADIUS_M,
     SPEED_BUMP_SHP,
     TARGET_REGION_NAME,
 )
 
 ###################################################
-# speed_bumps.py: 과속방지턱 polygon 데이터를 읽고, 각 도로 구간 포인트에 반경 300m 내의 과속방지턱 수를 합산하여 추가하는 기능을 제공합니다.
+# speed_bumps.py: 과속방지턱 polygon 데이터를 읽고, 각 도로 구간 포인트에 반경 50m 내의 과속방지턱 수를 합산하여 추가하는 기능을 제공합니다.
 ###################################################
 
 SPEED_BUMP_ID_COL = "MGRNU"
@@ -44,7 +44,7 @@ def add_speed_bump_counts(
     final_df,
     points_gdf,
     speed_bump_shp=SPEED_BUMP_SHP,
-    radius_m=SPEED_BUMP_RADIUS_M,
+    radius_m=BUFFER_50M,
     output_col=SPEED_BUMP_COLUMN,
 ):
     """각 POINT_ID의 반경 radius_m 안에 있는 과속방지턱 수를 추가합니다."""

@@ -3,6 +3,7 @@ import pandas as pd
 from shapely.geometry import LineString, MultiLineString
 
 from silverwalk.config import (
+    BUFFER_50M,
     INCLUDED_ROAD_CLASSES,
     ROAD_SHP,
     TARGET_REGION_NAME,
@@ -116,7 +117,7 @@ def create_road_points(target_roads, distance=25):
     return gpd.GeoDataFrame(point_rows, geometry="geometry", crs=target_roads.crs)
 
 
-def create_point_buffers(points_gdf, buffer_distance_m=50):
+def create_point_buffers(points_gdf, buffer_distance_m=BUFFER_50M):
     """각 도로 포인트 주변 버퍼 GeoDataFrame을 생성합니다."""
     point_buffers_gdf = points_gdf.copy()
     point_buffers_gdf["geometry"] = point_buffers_gdf.geometry.buffer(buffer_distance_m)

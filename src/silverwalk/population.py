@@ -4,6 +4,7 @@ import geopandas as gpd
 import pandas as pd
 
 from silverwalk.config import (
+    BUFFER_300M,
     ELDERLY_POPULATION_COLUMN,
     POPULATION_GRID_DIR,
     TARGET_REGION_NAME,
@@ -61,7 +62,7 @@ def add_elderly_population_300m(
     final_df,
     points_gdf,
     population_dir=POPULATION_GRID_DIR,
-    radius_m=300,
+    radius_m=BUFFER_300M,
     output_col=ELDERLY_POPULATION_COLUMN,
 ):
     """각 POINT_ID의 300m 반경 안에 있는 국토통계 250m 격자 고령인구수를 합산합니다."""
@@ -95,4 +96,3 @@ def add_elderly_population_300m(
     print(f"고령인구수 원본 컬럼: {POPULATION_VALUE_COLUMN}")
 
     return result_df
-

@@ -1,6 +1,7 @@
 import geopandas as gpd
 
 from silverwalk.config import (
+    BUFFER_50M,
     TARGET_REGION_NAME,
     TRADITIONAL_MARKET_COLUMN,
     TRADITIONAL_MARKET_SHP,
@@ -37,7 +38,7 @@ def add_traditional_market_presence(
     final_df,
     points_gdf,
     market_shp=TRADITIONAL_MARKET_SHP,
-    radius_m=50,
+    radius_m=BUFFER_50M,
     output_col=TRADITIONAL_MARKET_COLUMN,
 ):
     """각 POINT_ID의 반경 radius_m 안에 전통시장이 있으면 1, 없으면 0을 추가합니다."""

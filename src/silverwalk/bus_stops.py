@@ -2,6 +2,7 @@ import geopandas as gpd
 import pandas as pd
 
 from silverwalk.config import (
+    BUFFER_300M,
     BUS_STOP_COLUMN,
     BUS_STOP_XLSX,
     TARGET_REGION_NAME,
@@ -60,7 +61,7 @@ def add_bus_stop_counts(
     final_df,
     points_gdf,
     bus_stop_xlsx=BUS_STOP_XLSX,
-    radius_m=300,
+    radius_m=BUFFER_300M,
     output_col=BUS_STOP_COLUMN,
 ):
     """각 POINT_ID의 반경 radius_m 안에 있는 실제 버스정류장 수를 추가합니다."""

@@ -27,19 +27,16 @@ TARGET_LEGALDONG_PREFIX = "11%"
 TARGET_BUSINESS_SIDO_NAME = "서울특별시"
 INCLUDED_ROAD_CLASSES = {"3", "4"}  # 3: 로, 4: 길
 
-# 분석에 사용할 도로 구간의 간격, 사고 버퍼, 상가 및 인구 반경, 고령인구 컬럼명 등 설정값을 정의
+# 분석에 사용할 도로 구간 간격과 공통 버퍼 반경을 정의
 POINT_INTERVAL_M = 25
-ACCIDENT_BUFFER_M = 50
-BUSINESS_RADIUS_M = 300
-POPULATION_RADIUS_M = 300
+BUFFER_50M = 50
+BUFFER_300M = 300
+
+# 최종 데이터 컬럼명을 정의
 ELDERLY_POPULATION_COLUMN = "고령인구수"
-SOCIAL_WELFARE_RADIUS_M = 300
 SOCIAL_WELFARE_COLUMN = "사회복지시설개수"
-TRADITIONAL_MARKET_RADIUS_M = 50
 TRADITIONAL_MARKET_COLUMN = "전통시장여부"
-BUS_STOP_RADIUS_M = 300
 BUS_STOP_COLUMN = "버스정류장개수"
-SPEED_BUMP_RADIUS_M = 50
 SPEED_BUMP_COLUMN = "과속방지턱개수"
 
 # 상가 업종 컬럼명 리스트를 정의합니다. 이 컬럼들은 상가 정보 CSV에서 추출하여 분석에 사용할 업종을 나타냅니다.

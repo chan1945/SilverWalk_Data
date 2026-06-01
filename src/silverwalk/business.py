@@ -1,14 +1,19 @@
 import geopandas as gpd
 import pandas as pd
 
-from silverwalk.config import BUSINESS_CATEGORY_COLUMNS, TARGET_BUSINESS_SIDO_NAME, TARGET_REGION_NAME
+from silverwalk.config import (
+    BUFFER_300M,
+    BUSINESS_CATEGORY_COLUMNS,
+    TARGET_BUSINESS_SIDO_NAME,
+    TARGET_REGION_NAME,
+)
 
 ###################################################
 # 상가 수 컬럼 추가 함수
 # 각 POINT_ID의 반경 300m 안에 있는 대상 지역 상가 수를 업종별 컬럼으로 추가합니다.
 ###################################################
 
-def add_business_category_counts(final_df, points_gdf, business_csv, radius_m=300):
+def add_business_category_counts(final_df, points_gdf, business_csv, radius_m=BUFFER_300M):
     """각 POINT_ID의 반경 radius_m 안에 있는 대상 지역 상가 수를 업종별 컬럼으로 추가합니다."""
     required_cols = [
         "상가업소번호",
