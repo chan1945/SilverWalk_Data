@@ -14,6 +14,14 @@ ROAD_SHP_CANDIDATES = [
 ACCIDENT_CSV = DATA_DIR / "seoul_old_pedestrian_individual_accidents_2020_2025.csv"
 NODELINK_SHP = DATA_DIR / "ITS_node_link" / "MOCT_LINK.shp"
 BUSINESS_CSV = DATA_DIR / "소상공인시장진흥공단_상가(상권)정보_서울_202603.csv"
+POPULATION_GRID_CANDIDATES = [
+    DATA_DIR / "seoul_elderly_population_grid.shp",
+    DATA_DIR / "seoul_elderly_population_grid.geojson",
+    DATA_DIR / "seoul_elderly_population_grid.csv",
+    DATA_DIR / "국토정보플랫폼_서울_고령인구_격자.shp",
+    DATA_DIR / "국토정보플랫폼_서울_고령인구_격자.geojson",
+    DATA_DIR / "국토정보플랫폼_서울_고령인구_격자.csv",
+]
 OUTPUT_JOIN_CSV = DATA_DIR / "seoul_road_points.csv"
 
 TARGET_REGION_NAME = "서울시"
@@ -25,6 +33,8 @@ INCLUDED_ROAD_CLASSES = {"3", "4"}  # 3: 로, 4: 길
 POINT_INTERVAL_M = 25
 ACCIDENT_BUFFER_M = 50
 BUSINESS_RADIUS_M = 300
+POPULATION_RADIUS_M = 300
+ELDERLY_POPULATION_COLUMN = "고령인구_300m"
 
 BUSINESS_CATEGORY_COLUMNS = [
     "과학·기술",
