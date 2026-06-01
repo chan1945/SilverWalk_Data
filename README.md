@@ -111,6 +111,9 @@ Data/seoul_old_pedestrian_individual_accidents_2020_2025.csv
 Data/seoul_road_points.csv
 ```
 
+이미 `Data/seoul_road_points.csv`가 있으면 기존 CSV를 읽어서 없는 feature 컬럼만 추가합니다.
+도로 shapefile 로드, 25m 포인트 재생성, 이미 계산된 feature 결합은 건너뜁니다.
+
 이 노트북은 다음 feature를 결합합니다.
 
 | feature | 생성 방식 |
