@@ -5,37 +5,32 @@ from pathlib import Path
 # 다른 모듈에서 이 설정값들을 import하여 사용합니다.
 ###################################################
 
+# 데이터 파일 경로 설정
 DATA_DIR = Path("Data")
 
-ROAD_SHP_CANDIDATES = [
-    Path("(도로명주소)도로구간_서울") / "TL_SPRD_MANAGE_11_202605.shp",
-    DATA_DIR / "(도로명주소)도로구간_서울" / "TL_SPRD_MANAGE_11_202605.shp",
-]
+# 서울시 도로 구간 shapefile, 보행자 사고 CSV, 노드 링크 shapefile, 상가 정보 CSV, 고령인구 격자 데이터 디렉토리 경로를 설정
+ROAD_SHP = DATA_DIR / "(도로명주소)도로구간_서울" / "TL_SPRD_MANAGE_11_202605.shp"
 ACCIDENT_CSV = DATA_DIR / "seoul_old_pedestrian_individual_accidents_2020_2025.csv"
 NODELINK_SHP = DATA_DIR / "ITS_node_link" / "MOCT_LINK.shp"
 BUSINESS_CSV = DATA_DIR / "소상공인시장진흥공단_상가(상권)정보_서울_202603.csv"
-POPULATION_GRID_CANDIDATES = [
-    DATA_DIR / "seoul_elderly_population_grid.shp",
-    DATA_DIR / "seoul_elderly_population_grid.geojson",
-    DATA_DIR / "seoul_elderly_population_grid.csv",
-    DATA_DIR / "국토정보플랫폼_서울_고령인구_격자.shp",
-    DATA_DIR / "국토정보플랫폼_서울_고령인구_격자.geojson",
-    DATA_DIR / "국토정보플랫폼_서울_고령인구_격자.csv",
-]
+POPULATION_GRID_DIR = DATA_DIR / "국토통계_고령인구수"
 OUTPUT_JOIN_CSV = DATA_DIR / "seoul_road_points.csv"
 
+# 분석 대상 지역과 도로 구간을 설정하는 상수들
 TARGET_REGION_NAME = "서울시"
 TARGET_SIG_CD_PREFIX = "11"
 TARGET_LEGALDONG_PREFIX = "11%"
 TARGET_BUSINESS_SIDO_NAME = "서울특별시"
 INCLUDED_ROAD_CLASSES = {"3", "4"}  # 3: 로, 4: 길
 
+# 분석에 사용할 도로 구간의 간격, 사고 버퍼, 상가 및 인구 반경, 고령인구 컬럼명 등 설정값을 정의
 POINT_INTERVAL_M = 25
 ACCIDENT_BUFFER_M = 50
 BUSINESS_RADIUS_M = 300
 POPULATION_RADIUS_M = 300
-ELDERLY_POPULATION_COLUMN = "고령인구_300m"
+ELDERLY_POPULATION_COLUMN = "고령인구수"
 
+# 상가 업종 컬럼명 리스트를 정의합니다. 이 컬럼들은 상가 정보 CSV에서 추출하여 분석에 사용할 업종을 나타냅니다.
 BUSINESS_CATEGORY_COLUMNS = [
     "과학·기술",
     "교육",
