@@ -4,7 +4,7 @@ from shapely.geometry import LineString, MultiLineString
 
 from silverwalk.config import (
     INCLUDED_ROAD_CLASSES,
-    ROAD_SHP_CANDIDATES,
+    ROAD_SHP,
     TARGET_REGION_NAME,
     TARGET_SIG_CD_PREFIX,
 )
@@ -14,17 +14,10 @@ from silverwalk.config import (
 # 다른 모듈에서 이 함수들을 import하여 사용합니다.
 ###################################################
 
-def resolve_existing_path(candidates, description):
-    """후보 경로 중 실제 존재하는 첫 번째 경로를 반환합니다."""
-    path = next((candidate for candidate in candidates if candidate.exists()), None)
-    if path is None:
-        raise FileNotFoundError(f"{description} 파일을 찾을 수 없습니다.")
-    return path
-
-
-def load_road_segments(road_shp_candidates=ROAD_SHP_CANDIDATES, encoding="cp949"):
+def load_road_segments(road_shp=ROAD_SHP, encoding="cp949"):
     """도로명주소 도로구간 shapefile을 읽습니다."""
-    road_shp = resolve_existing_path(road_shp_candidates, "도로명주소 도로구간 shapefile")
+    if not road_shp.exists():
+        raise FileNotFoundError(f"도로명주소 도로구간 shapefile을 찾을 수 없습니다: {road_shp}")
     roads = gpd.read_file(road_shp, encoding=encoding)
     return roads, road_shp
 
