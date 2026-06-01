@@ -15,6 +15,7 @@ NODELINK_SHP = DATA_DIR / "ITS_node_link" / "MOCT_LINK.shp"
 BUSINESS_CSV = DATA_DIR / "소상공인시장진흥공단_상가(상권)정보_서울_202603.csv"
 POPULATION_GRID_DIR = DATA_DIR / "국토통계_고령인구수"
 SOCIAL_WELFARE_GEOCODED_CSV = DATA_DIR / "서울시_노인의료복지시설현황_geocoded.csv"
+TRADITIONAL_MARKET_SHP = DATA_DIR / "전통시장여부" / "서울시 상권분석서비스(영역-상권)_전통시장.shp"
 OUTPUT_JOIN_CSV = DATA_DIR / "seoul_road_points.csv"
 
 # 분석 대상 지역과 도로 구간을 설정하는 상수들
@@ -32,6 +33,8 @@ POPULATION_RADIUS_M = 300
 ELDERLY_POPULATION_COLUMN = "고령인구수"
 SOCIAL_WELFARE_RADIUS_M = 300
 SOCIAL_WELFARE_COLUMN = "사회복지시설개수"
+TRADITIONAL_MARKET_RADIUS_M = 50
+TRADITIONAL_MARKET_COLUMN = "전통시장여부"
 
 # 상가 업종 컬럼명 리스트를 정의합니다. 이 컬럼들은 상가 정보 CSV에서 추출하여 분석에 사용할 업종을 나타냅니다.
 BUSINESS_CATEGORY_COLUMNS = [
