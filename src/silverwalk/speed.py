@@ -1,13 +1,15 @@
 import geopandas as gpd
 import pandas as pd
 
+from silverwalk.config import TARGET_REGION_NAME
+
 ###################################################
 # 제한속도 컬럼 추가 함수
 ###################################################
 
 def add_speed_limit(final_df, points_gdf, nodelink_shp):
     """ITS 표준노드링크 최근접 링크의 MAX_SPD를 제한속도 컬럼으로 추가합니다."""
-    # 전국 링크 전체를 최근접 결합하면 무거우므로, 먼저 진주시 포인트 범위 주변 bbox로 링크를 잘라 읽습니다.
+    # 전국 링크 전체를 최근접 결합하면 무거우므로, 먼저 대상 지역 포인트 범위 주변 bbox로 링크를 잘라 읽습니다.
     link_sample_crs = gpd.read_file(nodelink_shp, rows=1, encoding="cp949").crs
     point_bounds_links_crs = gpd.GeoSeries(
         [points_gdf.union_all().envelope],
@@ -35,7 +37,7 @@ def add_speed_limit(final_df, points_gdf, nodelink_shp):
     links_gdf = links_gdf.to_crs(points_gdf.crs)
 
     if links_gdf.empty:
-        raise ValueError("진주시 범위 주변에서 ITS 표준노드링크를 찾지 못했습니다.")
+        raise ValueError(f"{TARGET_REGION_NAME} 범위 주변에서 ITS 표준노드링크를 찾지 못했습니다.")
 
     point_speed_df = gpd.sjoin_nearest(
         points_gdf[["POINT_ID", "geometry"]],
@@ -57,4 +59,3 @@ def add_speed_limit(final_df, points_gdf, nodelink_shp):
     print(f"제한속도 결합 대상 링크 수: {len(links_gdf):,}")
 
     return final_df.merge(point_speed_df[["POINT_ID", "제한속도"]], on="POINT_ID", how="left")
-
