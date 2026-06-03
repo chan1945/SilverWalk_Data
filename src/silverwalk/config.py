@@ -6,7 +6,8 @@ from pathlib import Path
 ###################################################
 
 # 데이터 파일 경로 설정
-DATA_DIR = Path("Data")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DATA_DIR = PROJECT_ROOT / "Data"
 
 # 서울시 도로 구간 shapefile, 보행자 사고 CSV, 노드 링크 shapefile, 상가 정보 CSV, 고령인구 격자 데이터 디렉토리 경로를 설정
 ROAD_SHP = DATA_DIR / "(도로명주소)도로구간_서울" / "TL_SPRD_MANAGE_11_202605.shp"
@@ -14,9 +15,15 @@ ACCIDENT_CSV = DATA_DIR / "seoul_old_pedestrian_individual_accidents_2020_2025.c
 NODELINK_SHP = DATA_DIR / "ITS_node_link" / "MOCT_LINK.shp"
 BUSINESS_CSV = DATA_DIR / "소상공인시장진흥공단_상가(상권)정보_서울_202603.csv"
 POPULATION_GRID_DIR = DATA_DIR / "국토통계_고령인구수"
-SOCIAL_WELFARE_GEOCODED_CSV = DATA_DIR / "서울시_노인의료복지시설현황_geocoded.csv"
+SOCIAL_WELFARE_GEOCODED_CSV = DATA_DIR / "노인의료복지시설개수" / "서울시_노인의료복지시설현황_geocoded.csv"
+SENIOR_LEISURE_WELFARE_CSV = DATA_DIR / "노인여가복지시설" / "서울시 사회복지시설(노인여가복지시설) 목록.csv"
 TRADITIONAL_MARKET_SHP = DATA_DIR / "전통시장여부" / "서울시 상권분석서비스(영역-상권)_전통시장.shp"
 BUS_STOP_XLSX = DATA_DIR / "버스정류장개수" / "서울시버스정류소위치정보(20241002).xlsx"
+BUS_STOP_PASSENGER_CSV = DATA_DIR / "버스승하차인원" / "서울시 버스노선별 정류장별 승하차 인원 정보.csv"
+SUBWAY_STATION_CSV = DATA_DIR / "지하철역개수" / "서울교통공사_1_8호선 역사 좌표(위경도) 정보_20250814.csv"
+STREETLIGHT_CSV = DATA_DIR / "가로등개수" / "서울시 가로등 위치 정보.csv"
+CCTV_CSV = DATA_DIR / "CCTV개수" / "서울시 불법주정차_전용차로 위반 단속 CCTV 위치정보.csv"
+LIVING_POPULATION_CSV = DATA_DIR / "생활인구" / "행정동 단위 서울 생활인구(내국인).csv"
 SPEED_BUMP_SHP = DATA_DIR / "과속방지턱개수" / "A067_A.shp"
 INTERSECTION_SHP = DATA_DIR / "교차로개수" / "A008_P_20250814" / "A008_P" / "A008_P.shp"
 CROSSWALK_SHP = DATA_DIR / "횡단보도개수" / "횡단보도 위치 및 부착대 정보" / "A004_A_횡단보도" / "A004_A.shp"
@@ -40,6 +47,12 @@ ELDERLY_POPULATION_COLUMN = "고령인구수"
 SOCIAL_WELFARE_COLUMN = "사회복지시설개수"
 TRADITIONAL_MARKET_COLUMN = "전통시장여부"
 BUS_STOP_COLUMN = "버스정류장개수"
+BUS_BOARDING_TOTAL_COLUMN = "버스승차총승객수"
+BUS_ALIGHTING_TOTAL_COLUMN = "버스하차총승객수"
+BUS_RIDE_ALIGHT_TOTAL_COLUMN = "버스승하차총승객수"
+SUBWAY_STATION_COLUMN = "지하철역개수"
+STREETLIGHT_COLUMN = "가로등개수"
+CCTV_COLUMN = "CCTV개수"
 SPEED_BUMP_COLUMN = "과속방지턱개수"
 INTERSECTION_COLUMN = "교차로개수"
 CROSSWALK_COLUMN = "횡단보도개수"
