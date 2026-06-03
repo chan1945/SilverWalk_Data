@@ -16,11 +16,16 @@ BUS_STOP_LON_COL = "X좌표"
 BUS_STOP_LAT_COL = "Y좌표"
 BUS_STOP_TYPE_COL = "정류소타입"
 VIRTUAL_BUS_STOP_TYPE = "가상정류장"
-
+ 
 PASSENGER_STOP_ID_COL = "표준버스정류장ID"
 USE_DATE_COL = "사용일자"
 BOARDING_COL = "승차총승객수"
 ALIGHTING_COL = "하차총승객수"
+
+###################################################
+# 버스 승하차 인원을 칼럼에 '승차총승객수', '하차총승객수', '승하차통승객수' 추가
+# 각 POINT_ID의 반경 300m 안에 있는 대상 정류장을 기준으로 추가합니다.
+###################################################
 
 
 def load_bus_passenger_stops(
