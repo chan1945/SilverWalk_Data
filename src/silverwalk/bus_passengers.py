@@ -3,8 +3,6 @@ import pandas as pd
 
 from silverwalk.config import (
     BUFFER_300M,
-    BUS_ALIGHTING_TOTAL_COLUMN,
-    BUS_BOARDING_TOTAL_COLUMN,
     BUS_RIDE_ALIGHT_TOTAL_COLUMN,
     BUS_STOP_PASSENGER_CSV,
     BUS_STOP_XLSX,
@@ -23,8 +21,7 @@ BOARDING_COL = "승차총승객수"
 ALIGHTING_COL = "하차총승객수"
 
 ###################################################
-# 버스 승하차 인원을 칼럼에 '승차총승객수', '하차총승객수', '승하차통승객수' 추가
-# 각 POINT_ID의 반경 300m 안에 있는 대상 정류장을 기준으로 추가합니다.
+# 각 POINT_ID의 반경 300m 안에 있는 정류장의 승하차 총승객수를 추가합니다.
 ###################################################
 
 
@@ -77,33 +74,26 @@ def load_bus_passenger_stops(
     passengers_df[ALIGHTING_COL] = pd.to_numeric(passengers_df[ALIGHTING_COL], errors="coerce").fillna(0)
     passengers_df = passengers_df.dropna(subset=[PASSENGER_STOP_ID_COL]).copy()
     passengers_df[PASSENGER_STOP_ID_COL] = passengers_df[PASSENGER_STOP_ID_COL].astype("int64")
+    passengers_df[BUS_RIDE_ALIGHT_TOTAL_COLUMN] = passengers_df[BOARDING_COL] + passengers_df[ALIGHTING_COL]
 
     date_min = passengers_df[USE_DATE_COL].min()
     date_max = passengers_df[USE_DATE_COL].max()
     date_count = passengers_df[USE_DATE_COL].nunique()
 
     passenger_summary = (
-        passengers_df.groupby(PASSENGER_STOP_ID_COL, as_index=False)[[BOARDING_COL, ALIGHTING_COL]]
+        passengers_df.groupby(PASSENGER_STOP_ID_COL, as_index=False)[BUS_RIDE_ALIGHT_TOTAL_COLUMN]
         .sum()
         .rename(
             columns={
                 PASSENGER_STOP_ID_COL: BUS_STOP_ID_COL,
-                BOARDING_COL: BUS_BOARDING_TOTAL_COLUMN,
-                ALIGHTING_COL: BUS_ALIGHTING_TOTAL_COLUMN,
             }
         )
     )
-    passenger_summary[BUS_RIDE_ALIGHT_TOTAL_COLUMN] = (
-        passenger_summary[BUS_BOARDING_TOTAL_COLUMN] + passenger_summary[BUS_ALIGHTING_TOTAL_COLUMN]
-    )
 
     passenger_stops_df = stops_df.merge(passenger_summary, on=BUS_STOP_ID_COL, how="inner")
-    numeric_cols = [
-        BUS_BOARDING_TOTAL_COLUMN,
-        BUS_ALIGHTING_TOTAL_COLUMN,
-        BUS_RIDE_ALIGHT_TOTAL_COLUMN,
-    ]
-    passenger_stops_df[numeric_cols] = passenger_stops_df[numeric_cols].round().astype("int64")
+    passenger_stops_df[BUS_RIDE_ALIGHT_TOTAL_COLUMN] = (
+        passenger_stops_df[BUS_RIDE_ALIGHT_TOTAL_COLUMN].round().astype("int64")
+    )
 
     print(f"{TARGET_REGION_NAME} 버스 승하차 원본 행 수: {len(passengers_df):,}")
     print(f"버스 승하차 집계 기간: {date_min}~{date_max} ({date_count:,}일)")
@@ -132,26 +122,23 @@ def add_bus_passenger_totals(
     passenger_buffers_gdf = points_gdf[["POINT_ID", "geometry"]].copy()
     passenger_buffers_gdf["geometry"] = passenger_buffers_gdf.geometry.buffer(radius_m)
 
-    passenger_cols = [
-        BUS_BOARDING_TOTAL_COLUMN,
-        BUS_ALIGHTING_TOTAL_COLUMN,
-        BUS_RIDE_ALIGHT_TOTAL_COLUMN,
-    ]
     joined_passengers = gpd.sjoin(
-        passenger_stops_gdf[[BUS_STOP_ID_COL, *passenger_cols, "geometry"]],
+        passenger_stops_gdf[[BUS_STOP_ID_COL, BUS_RIDE_ALIGHT_TOTAL_COLUMN, "geometry"]],
         passenger_buffers_gdf[["POINT_ID", "geometry"]],
         how="inner",
         predicate="within",
     )
 
     passenger_point_summary = (
-        joined_passengers.groupby("POINT_ID", as_index=False)[passenger_cols]
+        joined_passengers.groupby("POINT_ID", as_index=False)[BUS_RIDE_ALIGHT_TOTAL_COLUMN]
         .sum()
     )
 
-    result_df = final_df.drop(columns=[col for col in passenger_cols if col in final_df.columns], errors="ignore")
+    result_df = final_df.drop(columns=[BUS_RIDE_ALIGHT_TOTAL_COLUMN], errors="ignore")
     result_df = result_df.merge(passenger_point_summary, on="POINT_ID", how="left")
-    result_df[passenger_cols] = result_df[passenger_cols].fillna(0).round().astype("int64")
+    result_df[BUS_RIDE_ALIGHT_TOTAL_COLUMN] = (
+        result_df[BUS_RIDE_ALIGHT_TOTAL_COLUMN].fillna(0).round().astype("int64")
+    )
 
     print(f"반경 {radius_m}m 버스 승하차 정류장-포인트 매칭 수: {len(joined_passengers):,}")
 
