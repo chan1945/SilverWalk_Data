@@ -29,6 +29,8 @@ INTERSECTION_SHP = DATA_DIR / "교차로개수" / "A008_P_20250814" / "A008_P" /
 CROSSWALK_SHP = DATA_DIR / "횡단보도개수" / "횡단보도 위치 및 부착대 정보" / "A004_A_횡단보도" / "A004_A.shp"
 CROSSWALK_WARNING_SHP = DATA_DIR / "횡단보도예고표시" / "A068_P(20250417)" / "A068_P.shp"
 PEDESTRIAN_SIGNAL_CSV = DATA_DIR / "보행자신호등설치여부" / "서울특별시_보행자 신호등 분포도.csv"
+PEDESTRIAN_PRIORITY_ROAD_CSV = DATA_DIR / "보행자우선도로여부" / "전국보행자우선도로표준데이터.csv"
+PUBLIC_PARKING_CSV = DATA_DIR / "공영주차장개수" / "서울시 공영주차장 안내 정보.csv"
 OUTPUT_JOIN_CSV = DATA_DIR / "seoul_road_points.csv"
 
 # 분석 대상 지역과 도로 구간을 설정하는 상수들
@@ -57,6 +59,8 @@ INTERSECTION_COLUMN = "교차로개수"
 CROSSWALK_COLUMN = "횡단보도개수"
 CROSSWALK_WARNING_COLUMN = "횡단보도예고표시여부"
 TRAFFIC_SIGNAL_COLUMN = "신호등설치여부"
+PEDESTRIAN_PRIORITY_ROAD_COLUMN = "보행자우선도로여부"
+PUBLIC_PARKING_COLUMN = "공영주차장개수"
 
 # 상가 업종 컬럼명 리스트를 정의합니다. 이 컬럼들은 상가 정보 CSV에서 추출하여 분석에 사용할 업종을 나타냅니다.
 BUSINESS_CATEGORY_COLUMNS = [
