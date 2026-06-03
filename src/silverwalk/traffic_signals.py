@@ -9,6 +9,10 @@ from silverwalk.config import (
 )
 
 
+###################################################
+# traffic_signals.py: 보행자신호등 데이터를 처리하고, 각 도로 구간 포인트에 반경 50m 내의 신호등 개수를 합산하여 추가하는 기능을 제공합니다.
+###################################################
+
 PEDESTRIAN_SIGNAL_ID_COL = "보행자신호등ID"
 PEDESTRIAN_SIGNAL_X_COL = "X좌표"
 PEDESTRIAN_SIGNAL_Y_COL = "Y좌표"
