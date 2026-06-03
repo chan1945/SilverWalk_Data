@@ -11,10 +11,12 @@ def add_speed_limit(final_df, points_gdf, nodelink_shp):
     """ITS 표준노드링크 최근접 링크의 MAX_SPD를 제한속도 컬럼으로 추가합니다."""
     # 전국 링크 전체를 최근접 결합하면 무거우므로, 먼저 대상 지역 포인트 범위 주변 bbox로 링크를 잘라 읽습니다.
     link_sample_crs = gpd.read_file(nodelink_shp, rows=1, encoding="cp949").crs
-    point_bounds_links_crs = gpd.GeoSeries(
-        [points_gdf.union_all().envelope],
-        crs=points_gdf.crs,
-    ).to_crs(link_sample_crs).total_bounds
+    
+    # union_all() 대신 total_bounds를 사용하여 메모리 및 속도 최적화
+    from shapely.geometry import box
+    minx, miny, maxx, maxy = points_gdf.total_bounds
+    point_bounds_poly = box(minx, miny, maxx, maxy)
+    point_bounds_links_crs = gpd.GeoSeries([point_bounds_poly], crs=points_gdf.crs).to_crs(link_sample_crs).total_bounds
 
     minx, miny, maxx, maxy = point_bounds_links_crs
     bbox_buffer_m = 1000
