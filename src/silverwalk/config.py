@@ -31,7 +31,7 @@ CROSSWALK_WARNING_SHP = DATA_DIR / "횡단보도예고표시" / "A068_P(20250417
 PEDESTRIAN_SIGNAL_CSV = DATA_DIR / "보행자신호등설치여부" / "서울특별시_보행자 신호등 분포도.csv"
 PEDESTRIAN_PRIORITY_ROAD_CSV = DATA_DIR / "보행자우선도로여부" / "전국보행자우선도로표준데이터.csv"
 PUBLIC_PARKING_CSV = DATA_DIR / "공영주차장개수" / "서울시 공영주차장 안내 정보.csv"
-SENIOR_DISABLED_PROTECTION_ZONE_CSV = DATA_DIR / "노인장애인보호구역여부" / "전국노인장애인보호구역표준데이터.csv"
+SENIOR_DISABLED_PROTECTION_ZONE_CSV = DATA_DIR / "전국노인장애인보호구역표준데이터.csv"
 OUTPUT_JOIN_CSV = DATA_DIR / "seoul_road_points.csv"
 
 # 분석 대상 지역과 도로 구간을 설정하는 상수들
